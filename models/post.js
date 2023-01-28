@@ -7,10 +7,21 @@ content:{
 },
 user:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"user"
-}
+    ref:"users"
+},
+comments:[
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"comment"
+
+    }
+]
 
 
 
 
+},{
+    timestamps:true
 })
+const post = mongoose.model("post",postschema);
+module.exports = post;

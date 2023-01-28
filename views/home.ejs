@@ -1,14 +1,84 @@
+<style>
+    section{
+        display:flex
+    }
+</style>
+
+
+
+
 <html>
 <header>
     <h1>this is home</h1>
 </header>
+<%if(locals.user){%>
 <body>
-   <div>
-    <ol>
-        <li>abhay</li>
-        <li>nisha</li>
+    <section>
+        <div>
+   <form action="posts/create"id = "post-form" method="post">
+    <textarea name="content"  cols="30" rows="4"></textarea>
+    <input type="submit" placeholder="post">
+   </form>
+
+ 
+
+ <ul>
+    <% for (post of post_){%>
+        <li>
+            <p>
+                <%=post.content %>
+                <br>
+                <%=post.user.name %>
+                <br>
+              <%  if(locals.user && post.user.id== locals.user.id){%>
+                <a href="/posts/destroy/ <%=post.id%>"> delete post</a>
+                <%  }%>
+                <p>                    <% for (comment of post.comments){%>
+                        <p>
+                            <%=comment.content %>
+                            <br>
+                            <%=     comment.user.name     %>
+                            <%  if(locals.user && comment.user.id== locals.user.id){%>
+                                <a href="/comments/destroy/ <%=comment.id%>"> delete comment</a>
+                                <%  }%>
+                        </p>
+                        <%}%>
+                    </p>
+
+                <form action="comments/create" method="post">
+                    <textarea name="content"  cols="30" rows="1" placeholder="add-comment"></textarea>
+                    <input type="hidden" name ="post" value="<%= post._id %>">
+                    <input type="submit" placeholder="post-comment">
+                </form>
+            </p>
         
-    </ol>
-   </div> 
+    </li>
+    <%}%>
+  
+ </ul>
+     
+
+
+    
+   </div>
+
+   <div>
+    <h3>friends</h3>
+    <ul>
+    <%for(u of all_user){%>
+<li>
+    <a href="/user/profile/<%=u.id%>"> <%=u.name%></a>
+</li>
+
+<%}%>
+</ul>
+   </div>
+
+</section>
+
 </body>
+<%}%>
 </html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>

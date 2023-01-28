@@ -14,10 +14,27 @@
                 <a href="/user/sign-up">sign-up</a>
             </li>
         </ul>
-        profile of a person
+      <img src="<%=user.avtaar%>" alt="<%=user.avtaar%>" width="150">
     </header>
     <p>
-        <%= user.name %>
-        <%= user.email %>
+        <%if(user.id==profile_user.id){ %>
+
+         <form action="/user/update/<%=user.id%>" method="post"  enctype="multipart/form-data">
+         <input type="text" name = "name"value="<%=profile_user.name%>">
+         <input type="text"email= "email" value="<%=profile_user.email%>">
+         <input type="text" password="password" value="<%=profile_user.password%>">
+         <input type="file"name="avtaar"placeholder="profile-picture">
+         <input type="submit" value="update">
+         </form>
+
+
+
+
+
+
+            <% }else{ %>
+        <%= profile_user.name %>
+        <%= profile_user.email %>
+        <%} %>
     </p>
-</html>
+</html> 

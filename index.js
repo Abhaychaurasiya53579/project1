@@ -26,7 +26,7 @@ app.use(express.urlencoded());
 app.use(cookieparser());
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,("./views")));
-
+app.use("/uploads",express.static(__dirname +"/uploads"));
 
 app.use(session({
     name:"session_cookie",

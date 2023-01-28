@@ -1,6 +1,7 @@
 const { userInfo } = require("os");
 const User = require("../models/models");
-
+const fs = require("fs");
+const path = require('path');
 
 module.exports.profile = async function(req,res){
     // if(req.cookies.session_cookie){
@@ -12,7 +13,13 @@ module.exports.profile = async function(req,res){
     //     return res.redirect("/user/sign-in");
     // }
    // return res.end("<h1>user profile</h1>");
-   return res.render("profile");
+
+  const profile_user =await User.findById(req.params.id.trim())
+   return res.render("profile",{
+    profile_user:profile_user
+   });
+
+
 }
 
 module.exports.sign_in =function(req,res){
@@ -26,6 +33,7 @@ module.exports.sign_up =function(req,res){
         return res.render("profile");
      }
     return res.render("sign_up");
+   // return res.render("profile");
 }
 
 module.exports.sign_out= function(req,res){
@@ -72,3 +80,26 @@ module.exports.sign_out= function(req,res){
         //  return res.render("profile");
         return res.redirect("/");
     }
+
+    module.exports.update = async function(req,res){
+        if(req.user.id==req.params.id){
+        const user= await User.findById(req.params.id.trim());
+        User.uploadavtaar(req,res,function(err){
+            if(err)console.log(err);
+
+           if(req.body.name) user.name = req.body.name;
+           if(req.body.email)user.email = req.body.email;
+           if(req.body.password) user.password = req.body.password;
+            if(req.file){
+                if(fs.existsSync(path.join(__dirname ,"..",user.avtaar))){
+                    fs.unlinkSync(path.join(__dirname ,"..",user.avtaar));
+                }
+               user.avtaar = User.avtaarpath +"/"+req.file.filename; 
+            }
+              user.save();
+        });
+        
+        return res.redirect("/");
+        console.log(user);
+    }
+}
